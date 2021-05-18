@@ -1,0 +1,15 @@
+<resources>
+    <string name="title_message_detail">Message Detail</string>
+    <string name="title_message_list">Messages</string>
+    <string name="msg_token_fmt">Token: %s</string>
+    <string name="default_notification_channel_id">Default Channel</string>
+    <string name="fcm_message">App Inbox Message</string>
+    <string name="network_error">Failed to load messages</string>
+    <string name="preference_file_key">x-ai-sp-file</string>
+    <string name="sp_app">x-ai-sp-app</string>
+    <string name="sp_key">x-ai-sp-key</string>
+    <string name="sp_contact">x-ai-sp-contact</string>
+    <string name="notif_init_title">Initializing app inbox</string>
+    <string name="notif_cancel">cancel</string>
+    <string name="sp_device_id">x-ai-sp-device-id</string>
+</resources>
