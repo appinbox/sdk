@@ -48,7 +48,6 @@ public class ListActivity extends AppCompatActivity {
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
-    private boolean mTwoPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,14 +58,6 @@ public class ListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
-        if (findViewById(R.id.message_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
-            mTwoPane = true;
-        }
-
         pullToRefresh = findViewById(R.id.pull_to_refresh);
         pullToRefresh.setOnRefreshListener(this::loadItems);
 
@@ -75,14 +66,18 @@ public class ListActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.message_list);
         assert recyclerView != null;
 
-        adapter = new SimpleItemRecyclerViewAdapter(this, ITEMS, mTwoPane);
+        adapter = new SimpleItemRecyclerViewAdapter(this, ITEMS);
         ((RecyclerView)recyclerView).setAdapter(adapter);
-        loadItems();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        loadPref();
+        loadItems();
+    }
+
+    private void loadPref() {
         SharedPreferences preferences = this.getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
         appId = preferences.getString(getString(R.string.sp_app), "");
         appKey = preferences.getString(getString(R.string.sp_key), "");
@@ -132,35 +127,22 @@ public class ListActivity extends AppCompatActivity {
 
         private final ListActivity mParentActivity;
         private final List<Message> mValues;
-        private final boolean mTwoPane;
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Message item = (Message) view.getTag();
-                if (mTwoPane) {
-                    Bundle arguments = new Bundle();
-                    arguments.putParcelable(DetailFragment.MSG_KEY, item);
-                    DetailFragment fragment = new DetailFragment();
-                    fragment.setArguments(arguments);
-                    mParentActivity.getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.message_detail_container, fragment)
-                            .commit();
-                } else {
-                    Context context = view.getContext();
-                    Intent intent = new Intent(context, DetailActivity.class);
-                    intent.putExtra(DetailFragment.MSG_KEY, item);
+                Context context = view.getContext();
+                Intent intent = new Intent(context, DetailActivity.class);
+                intent.putExtra(DetailFragment.MSG_KEY, item);
 
-                    context.startActivity(intent);
-                }
+                context.startActivity(intent);
             }
         };
 
         SimpleItemRecyclerViewAdapter(ListActivity parent,
-                                      List<Message> items,
-                                      boolean twoPane) {
+                                      List<Message> items) {
             mValues = items;
             mParentActivity = parent;
-            mTwoPane = twoPane;
         }
 
         @Override
@@ -172,7 +154,7 @@ public class ListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mIdView.setText(mValues.get(position).read ? "1" : "");
+            holder.mIdView.setText(DateUtil.format(mValues.get(position).readAt));
             holder.mContentView.setText(mValues.get(position).title + DateUtil.format(mValues.get(position).sentAt));
             holder.mDetailsView.setText(mValues.get(position).body);
 

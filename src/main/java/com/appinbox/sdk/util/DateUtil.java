@@ -6,6 +6,9 @@ import java.util.Date;
 
 public class DateUtil {
     public static String format(Date date) {
+        if (date == null) {
+            return "";
+        }
         long diff = new Date().getTime() - date.getTime();
 
         String timeString;

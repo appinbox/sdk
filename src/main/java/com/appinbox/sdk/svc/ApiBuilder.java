@@ -52,7 +52,7 @@ public class ApiBuilder {
             final GsonBuilder builder = new GsonBuilder();
             builder.registerTypeAdapter(Date.class, (JsonDeserializer<Date>) (json, typeOfT, context) -> {
                 try {
-                    return new Date(json.getAsLong());
+                    return new Date(json.getAsLong() * 1000);
                 } catch (JsonParseException e) {
                     e.printStackTrace();
                     return null;

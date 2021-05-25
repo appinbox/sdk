@@ -13,14 +13,19 @@ public class Message implements Parcelable {
     public final String title;
     public final String body;
     public final Date sentAt;
-    public final Boolean read;
+    public final Date readAt;
 
     protected Message(Parcel in) {
         id = in.readString();
         title = in.readString();
         body = in.readString();
         sentAt = new Date(in.readLong());
-        read = in.readLong() == 1;
+        Long rat = in.readLong();
+        if (rat > 0) {
+            readAt = new Date(in.readLong());
+        } else {
+            readAt = null;
+        }
     }
 
     @Override
@@ -34,7 +39,11 @@ public class Message implements Parcelable {
         dest.writeString(title);
         dest.writeString(body);
         dest.writeLong(sentAt.getTime());
-        dest.writeLong(read?1:0);
+        if (readAt != null) {
+            dest.writeLong(readAt.getTime());
+        } else {
+            dest.writeLong(0);
+        }
     }
 
     @SuppressWarnings("unused")

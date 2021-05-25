@@ -25,6 +25,9 @@ public interface MsgApi {
     @GET("/v1/messages")
     Call<List<Message>> getMessages(@Header("x-ai-app") String appId, @Header("x-ai-key") String appKey, @Header("x-ai-contact") String contact);
 
-    @GET("/v1/message/{id}")
-    Call<List<Message>> getMessage(@Header("x-ai-app") String appId, @Header("x-ai-key") String appKey, @Header("x-ai-contact") String contact, @Path("id") String msgId);
+    @GET("/v1/messages/{id}")
+    Call<Message> getMessage(@Header("x-ai-app") String appId, @Header("x-ai-key") String appKey, @Header("x-ai-contact") String contact, @Path("id") String msgId);
+
+    @POST("/v1/messages/{id}/read")
+    Call<Message> readMessage(@Header("x-ai-app") String appId, @Header("x-ai-key") String appKey, @Header("x-ai-contact") String contact, @Path("id") String msgId);
 }
