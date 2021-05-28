@@ -1,22 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.appinbox.sdk">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application>
         <activity
-            android:name=".msg.ListActivity"
-            android:label="@string/title_message_list"
+            android:name=".AppInboxActivity"
+            android:label="@string/title_activity_app_inbox"
             android:theme="@style/Theme.AppInbox.NoActionBar"></activity>
-        <activity
-            android:name=".msg.DetailActivity"
-            android:label="@string/title_message_detail"
-            android:parentActivityName=".msg.ListActivity"
-            android:theme="@style/Theme.AppInbox.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.appinbox.sdk.msg.ListActivity" />
-        </activity>
     </application>
 
 </manifest>
