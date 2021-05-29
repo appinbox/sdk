@@ -2,6 +2,7 @@ package com.appinbox.sdk.ui
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import com.appinbox.sdk.R
 import com.appinbox.sdk.databinding.CMessageBinding
 import com.appinbox.sdk.databinding.FListBinding
 import com.appinbox.sdk.repo.dao.Message
+import com.appinbox.sdk.util.DateUtil
 import com.appinbox.sdk.vm.ListVM
 import com.appinbox.sdk.vm.STATUS
 
@@ -92,9 +94,13 @@ class ItemAdapter(private val dataset: List<Message>) : RecyclerView.Adapter<Ite
         private val binding: CMessageBinding = _binding
 
         fun bind(msg: Message) {
-            binding.idText.text = msg.id
-            binding.content.text = msg.title
-            binding.details.text = msg.body
+            binding.tvListTitle.text = msg.title
+            binding.tvListBody.text = msg.body
+            binding.tvListDate.text = DateUtil.format(msg.sentAt)
+            if (msg.readAt != null) {
+                binding.tvListTitle.typeface = Typeface.DEFAULT_BOLD
+                binding.tvListDate.typeface = Typeface.DEFAULT_BOLD
+            }
         }
     }
 

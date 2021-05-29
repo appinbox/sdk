@@ -10,4 +10,24 @@
     <style name="Theme.AppInbox.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.AppInbox.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="list_title">
+        <item name="android:textColor">@color/b90</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="list_date">
+        <item name="android:textColor">@color/b90</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+    <style name="list_body">
+        <item name="android:textColor">@color/b60</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="detail_title">
+        <item name="android:textColor">@color/b90</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+    <style name="detail_body">
+        <item name="android:textColor">@color/b90</item>
+        <item name="android:textSize">16sp</item>
+    </style>
 </resources>
