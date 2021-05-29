@@ -14,6 +14,7 @@ import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import androidx.work.WorkRequest
+import com.appinbox.sdk.ui.AppInboxActivity
 import com.appinbox.sdk.worker.ClearWorker
 import com.appinbox.sdk.worker.InitWorker
 import com.appinbox.sdk.worker.WorkerVars

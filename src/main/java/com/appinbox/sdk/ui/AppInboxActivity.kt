@@ -1,12 +1,12 @@
-package com.appinbox.sdk
+package com.appinbox.sdk.ui
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.appinbox.sdk.R
 import com.appinbox.sdk.databinding.AAppInboxBinding
 
 class AppInboxActivity : AppCompatActivity() {

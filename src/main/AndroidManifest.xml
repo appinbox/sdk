@@ -7,7 +7,7 @@
 
     <application>
         <activity
-            android:name=".AppInboxActivity"
+            android:name=".ui.AppInboxActivity"
             android:label="@string/title_activity_app_inbox"
             android:theme="@style/Theme.AppInbox.NoActionBar"></activity>
     </application>

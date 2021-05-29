@@ -1,4 +1,4 @@
-package com.appinbox.sdk
+package com.appinbox.sdk.ui
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

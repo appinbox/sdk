@@ -1,4 +1,4 @@
-package com.appinbox.sdk
+package com.appinbox.sdk.ui
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -7,15 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.appinbox.sdk.R
 import com.appinbox.sdk.databinding.CMessageBinding
 import com.appinbox.sdk.databinding.FListBinding
 import com.appinbox.sdk.model.Message
-import com.appinbox.sdk.svc.ApiBuilder
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.appinbox.sdk.vm.ListVM
+import com.appinbox.sdk.vm.STATUS
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -45,13 +45,32 @@ class ListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.rvMessageList.adapter = adapter
-        binding.vPullToRefresh.setOnRefreshListener { this::loadItems }
-    }
-
-    override fun onResume() {
-        super.onResume()
         loadPref()
-        loadItems()
+        val model: ListVM by viewModels()
+        model.init(appId, appKey, contact)
+        model.getUsers().observe(this, {
+            adapter.setData(it)
+        })
+        model.getStatus().observe(this, { status ->
+            when (status) {
+                STATUS.LOADING -> {
+                    binding.vPullToRefresh.isRefreshing = true
+                    binding.tvErrorText.visibility = View.GONE
+                    binding.rvMessageList.visibility = View.VISIBLE
+                }
+                STATUS.DONE -> {
+                    binding.vPullToRefresh.isRefreshing = false
+                    binding.tvErrorText.visibility = View.GONE
+                    binding.rvMessageList.visibility = View.VISIBLE
+                }
+                STATUS.FAIL -> {
+                    binding.vPullToRefresh.isRefreshing = false
+                    binding.tvErrorText.visibility = View.VISIBLE
+                    binding.rvMessageList.visibility = View.GONE
+                }
+            }
+        })
+        binding.vPullToRefresh.setOnRefreshListener(model::loadMsgs)
     }
 
     private fun loadPref() {
@@ -62,50 +81,13 @@ class ListFragment : Fragment() {
         contact = preferences?.getString(getString(R.string.sp_contact), "")
     }
 
-    private fun loadItems() {
-        binding.vPullToRefresh.setRefreshing(true)
-        ApiBuilder.getApi().getMessages(appId, appKey, contact)
-            .enqueue(object : Callback<List<Message>> {
-                override fun onResponse(
-                    call: Call<List<Message>>,
-                    response: Response<List<Message>>
-                ) {
-                    if (response.body() != null) {
-                        setupRecyclerView(response.body()!!)
-                    } else {
-                        showFailed()
-                    }
-                    binding.vPullToRefresh.setRefreshing(false)
-                }
-
-                override fun onFailure(call: Call<List<Message>>, t: Throwable) {
-                    showFailed()
-                    binding.vPullToRefresh.setRefreshing(false)
-                }
-            })
-    }
-
-    private fun showFailed() {
-        binding.tvErrorText.setVisibility(View.VISIBLE)
-        binding.rvMessageList.setVisibility(View.GONE)
-    }
-
-    private fun setupRecyclerView(msgs: List<Message>) {
-        items.clear()
-        items.addAll(msgs)
-
-        binding.tvErrorText.visibility = View.GONE
-        binding.rvMessageList.visibility = View.VISIBLE
-        adapter.notifyDataSetChanged()
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 }
 
-class ItemAdapter(private val dataset: List<Message?>) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
+class ItemAdapter(private val dataset: List<Message>) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
     inner class ItemViewHolder(_binding: CMessageBinding) : RecyclerView.ViewHolder(_binding.root) {
         private val binding: CMessageBinding = _binding
 
@@ -115,8 +97,14 @@ class ItemAdapter(private val dataset: List<Message?>) : RecyclerView.Adapter<It
             binding.details.text = msg.body
         }
     }
+
+    private var _dataset = dataset
+    fun setData(dataset: List<Message>) {
+        this._dataset = dataset
+        notifyDataSetChanged()
+    }
     override fun getItemCount(): Int {
-        return dataset.size
+        return _dataset.size
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -126,8 +114,8 @@ class ItemAdapter(private val dataset: List<Message?>) : RecyclerView.Adapter<It
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        val item = dataset[position]
-        holder.bind(item!!)
+        val item = _dataset[position]
+        holder.bind(item)
         holder.itemView.setOnClickListener {
             val action = ListFragmentDirections.actionShowDetails(item.id, item.title, item.body)
             it.findNavController().navigate(action)

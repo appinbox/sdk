@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="com.appinbox.sdk.ListFragment"
+        android:name="com.appinbox.sdk.ui.ListFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/f_list">
 
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="com.appinbox.sdk.DetailFragment"
+        android:name="com.appinbox.sdk.ui.DetailFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/f_detail">
         <argument

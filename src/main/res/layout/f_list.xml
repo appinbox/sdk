@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ListFragment">
+    tools:context=".ui.ListFragment">
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/v_pull_to_refresh"
         android:layout_width="match_parent"
@@ -26,7 +26,7 @@
                 android:layout_height="match_parent"
                 android:visibility="gone"
                 app:layoutManager="LinearLayoutManager"
-                tools:context=".AppInboxActivity"
+                tools:context=".ui.AppInboxActivity"
                 tools:listitem="@layout/c_message" />
         </FrameLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
