@@ -1,10 +1,13 @@
 package com.appinbox.sdk.vm
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.appinbox.sdk.model.Message
-import com.appinbox.sdk.svc.ApiBuilder
+import android.app.Application
+import androidx.lifecycle.*
+import com.appinbox.sdk.repo.dao.Message
+import com.appinbox.sdk.repo.dao.MessageDao
+import com.appinbox.sdk.repo.dao.SdkDatabase
+import com.appinbox.sdk.repo.svc.ApiBuilder
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -13,19 +16,15 @@ enum class STATUS {
     LOADING, DONE, FAIL
 }
 
-class ListVM :ViewModel(){
+class ListVM(application: Application) : AndroidViewModel(application){
+
     private var appId: String? = null
     private var appKey: String? = null
     private var contact: String? = null
+    private val dao: MessageDao = SdkDatabase.getInstance(application.applicationContext).messageDao()
     private val status: MutableLiveData<STATUS> by lazy {
         MutableLiveData<STATUS>().also {
             it.value = STATUS.LOADING
-        }
-    }
-
-    private val msgs: MutableLiveData<List<Message>> by lazy {
-        MutableLiveData<List<Message>>().also {
-            loadMsgs()
         }
     }
 
@@ -45,7 +44,9 @@ class ListVM :ViewModel(){
                 ) {
                     if (response.body() != null) {
                         status.value = STATUS.DONE
-                        msgs.value = response.body()
+                        viewModelScope.launch(Dispatchers.IO) {
+                            dao.insertAll(response.body()!!)
+                        }
                     } else {
                         status.value = STATUS.FAIL
                     }
@@ -62,6 +63,7 @@ class ListVM :ViewModel(){
     }
 
     fun getUsers(): LiveData<List<Message>> {
-        return msgs
+        loadMsgs()
+        return dao.getAll()
     }
 }

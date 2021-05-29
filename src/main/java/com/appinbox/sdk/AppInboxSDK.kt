@@ -10,10 +10,12 @@ import android.media.RingtoneManager
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.room.Room
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import androidx.work.WorkRequest
+import com.appinbox.sdk.repo.dao.SdkDatabase
 import com.appinbox.sdk.ui.AppInboxActivity
 import com.appinbox.sdk.worker.ClearWorker
 import com.appinbox.sdk.worker.InitWorker
@@ -24,6 +26,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
 class AppInboxSDK {
+
     companion object {
         private const val TAG = "SDK"
         const val SDK_VERSION = "1.5.18"

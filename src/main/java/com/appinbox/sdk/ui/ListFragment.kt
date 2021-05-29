@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.appinbox.sdk.R
 import com.appinbox.sdk.databinding.CMessageBinding
 import com.appinbox.sdk.databinding.FListBinding
-import com.appinbox.sdk.model.Message
+import com.appinbox.sdk.repo.dao.Message
 import com.appinbox.sdk.vm.ListVM
 import com.appinbox.sdk.vm.STATUS
 

@@ -1,4 +1,4 @@
-package com.appinbox.sdk.svc
+package com.appinbox.sdk.repo.svc
 
 import com.appinbox.sdk.AppInboxSDK
 import com.google.gson.*

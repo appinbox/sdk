@@ -11,7 +11,7 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.appinbox.sdk.R
 import com.appinbox.sdk.model.Device
-import com.appinbox.sdk.svc.ApiBuilder
+import com.appinbox.sdk.repo.svc.ApiBuilder
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

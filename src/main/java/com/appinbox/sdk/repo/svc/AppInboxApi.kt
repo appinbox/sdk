@@ -1,7 +1,7 @@
-package com.appinbox.sdk.svc
+package com.appinbox.sdk.repo.svc
 
 import com.appinbox.sdk.model.Device
-import com.appinbox.sdk.model.Message
+import com.appinbox.sdk.repo.dao.Message
 import retrofit2.Call
 import retrofit2.http.*
 
