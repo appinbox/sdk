@@ -24,9 +24,6 @@ import com.appinbox.sdk.vm.STATUS
  */
 class ListFragment : Fragment() {
     private var items: MutableList<Message> = mutableListOf()
-    private var appId: String? = null
-    private var appKey: String? = null
-    private var contact: String? = null
     private val adapter = ItemAdapter(items)
 
     private var _binding: FListBinding? = null
@@ -47,9 +44,7 @@ class ListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.rvMessageList.adapter = adapter
-        loadPref()
         val model: ListVM by viewModels()
-        model.init(appId, appKey, contact)
         model.getUsers().observe(this, {
             adapter.setData(it)
         })
@@ -75,14 +70,6 @@ class ListFragment : Fragment() {
         binding.vPullToRefresh.setOnRefreshListener(model::loadMsgs)
     }
 
-    private fun loadPref() {
-        val preferences: SharedPreferences?=
-            activity?.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
-        appId = preferences?.getString(getString(R.string.sp_app), "")
-        appKey = preferences?.getString(getString(R.string.sp_key), "")
-        contact = preferences?.getString(getString(R.string.sp_contact), "")
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -100,6 +87,9 @@ class ItemAdapter(private val dataset: List<Message>) : RecyclerView.Adapter<Ite
             if (msg.readAt == null) {
                 binding.tvListTitle.typeface = Typeface.DEFAULT_BOLD
                 binding.tvListDate.typeface = Typeface.DEFAULT_BOLD
+            } else {
+                binding.tvListTitle.typeface = Typeface.DEFAULT
+                binding.tvListDate.typeface = Typeface.DEFAULT
             }
         }
     }
@@ -124,9 +114,9 @@ class ItemAdapter(private val dataset: List<Message>) : RecyclerView.Adapter<Ite
         holder.bind(item)
         holder.itemView.setOnClickListener {
             val sentAt = "Sent: ${DateUtil.format(item.sentAt)}"
-            var readAt = DateUtil.format(item.readAt)
-            if (readAt.isNotEmpty()) {
-                readAt = "Read: $readAt"
+            var readAt = ""
+            if (item.readAt != null) {
+                readAt = "Read: ${DateUtil.format(item.readAt)}"
             }
             val action = ListFragmentDirections.actionShowDetails(item.id, item.title, item.body, sentAt, readAt)
             it.findNavController().navigate(action)

@@ -1,6 +1,11 @@
 package com.appinbox.sdk.repo.svc
 
+import android.content.Context
+import androidx.room.Room
 import com.appinbox.sdk.AppInboxSDK
+import com.appinbox.sdk.model.SdkAuth
+import com.appinbox.sdk.repo.dao.SdkDatabase
+import com.appinbox.sdk.util.SingletonHolder
 import com.google.gson.*
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -12,7 +17,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 object ApiBuilder {
-    var api: AppInboxApi? = null
+    private var api: AppInboxApi? = null
         get() {
             init()
             if (field == null) {
@@ -20,7 +25,6 @@ object ApiBuilder {
             }
             return field
         }
-        private set
     private var retrofit: Retrofit? = null
     private fun init() {
         if (retrofit == null) {

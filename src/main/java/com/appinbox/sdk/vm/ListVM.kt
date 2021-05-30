@@ -2,6 +2,7 @@ package com.appinbox.sdk.vm
 
 import android.app.Application
 import androidx.lifecycle.*
+import com.appinbox.sdk.model.SdkAuth
 import com.appinbox.sdk.repo.dao.Message
 import com.appinbox.sdk.repo.dao.MessageDao
 import com.appinbox.sdk.repo.dao.SdkDatabase
@@ -18,9 +19,6 @@ enum class STATUS {
 
 class ListVM(application: Application) : AndroidViewModel(application){
 
-    private var appId: String? = null
-    private var appKey: String? = null
-    private var contact: String? = null
     private val dao: MessageDao = SdkDatabase.getInstance(application.applicationContext).messageDao()
     private val status: MutableLiveData<STATUS> by lazy {
         MutableLiveData<STATUS>().also {
@@ -28,15 +26,9 @@ class ListVM(application: Application) : AndroidViewModel(application){
         }
     }
 
-    fun init(appId: String?, appKey: String?, contact: String?) {
-        this.appId = appId
-        this.appKey = appKey
-        this.contact = contact
-    }
-
     fun loadMsgs() {
         status.value = STATUS.LOADING
-        ApiBuilder.getApi().getMessages(appId, appKey, contact)
+        ApiBuilder.getApi().getMessages(SdkAuth.appId, SdkAuth.appKey, SdkAuth.contact)
             .enqueue(object : Callback<List<Message>> {
                 override fun onResponse(
                     call: Call<List<Message>>,

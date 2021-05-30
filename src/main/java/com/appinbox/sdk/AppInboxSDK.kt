@@ -15,6 +15,7 @@ import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import androidx.work.WorkRequest
+import com.appinbox.sdk.model.SdkAuth
 import com.appinbox.sdk.repo.dao.SdkDatabase
 import com.appinbox.sdk.ui.AppInboxActivity
 import com.appinbox.sdk.worker.ClearWorker
@@ -131,6 +132,10 @@ class AppInboxSDK {
         }
 
         private fun savePrefs(activity: Activity, appId: String, appKey: String, contact: String) {
+            SdkAuth.appId = appId
+            SdkAuth.appKey = appKey
+            SdkAuth.contact = contact
+
             val sharedPref = activity.getSharedPreferences(
                 activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE
             )
@@ -151,6 +156,9 @@ class AppInboxSDK {
         }
 
         private fun clearPrefs(activity: Activity) {
+            SdkAuth.appId = ""
+            SdkAuth.appKey = ""
+            SdkAuth.contact = ""
             val sharedPref = activity.getSharedPreferences(
                 activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE
             )
