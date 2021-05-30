@@ -97,7 +97,7 @@ class ItemAdapter(private val dataset: List<Message>) : RecyclerView.Adapter<Ite
             binding.tvListTitle.text = msg.title
             binding.tvListBody.text = msg.body
             binding.tvListDate.text = DateUtil.format(msg.sentAt)
-            if (msg.readAt != null) {
+            if (msg.readAt == null) {
                 binding.tvListTitle.typeface = Typeface.DEFAULT_BOLD
                 binding.tvListDate.typeface = Typeface.DEFAULT_BOLD
             }
@@ -123,7 +123,12 @@ class ItemAdapter(private val dataset: List<Message>) : RecyclerView.Adapter<Ite
         val item = _dataset[position]
         holder.bind(item)
         holder.itemView.setOnClickListener {
-            val action = ListFragmentDirections.actionShowDetails(item.id, item.title, item.body)
+            val sentAt = "Sent: ${DateUtil.format(item.sentAt)}"
+            var readAt = DateUtil.format(item.readAt)
+            if (readAt.isNotEmpty()) {
+                readAt = "Read: $readAt"
+            }
+            val action = ListFragmentDirections.actionShowDetails(item.id, item.title, item.body, sentAt, readAt)
             it.findNavController().navigate(action)
         }
     }

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.navArgs
 import com.appinbox.sdk.databinding.FDetailBinding
+import com.appinbox.sdk.repo.svc.ApiBuilder
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -24,7 +25,7 @@ class DetailFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         _binding = FDetailBinding.inflate(inflater, container, false)
         return binding.root
@@ -34,6 +35,8 @@ class DetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.tvDetailTitle.text = args.title
         binding.tvDetailBody.text = args.body
+        binding.tvDetailSentAt.text = args.sentAt
+        binding.tvDetailReadAt.text = args.readAt
     }
 
     override fun onDestroyView() {

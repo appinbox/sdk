@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/FirstFragment"
         android:name="com.appinbox.sdk.ui.ListFragment"
-        android:label="@string/first_fragment_label"
+        android:label="@string/f_list_label"
         tools:layout="@layout/f_list">
 
         <action
@@ -18,7 +18,7 @@
     <fragment
         android:id="@+id/SecondFragment"
         android:name="com.appinbox.sdk.ui.DetailFragment"
-        android:label="@string/second_fragment_label"
+        android:label="@string/f_detail_label"
         tools:layout="@layout/f_detail">
         <argument
             android:name="messageId"
@@ -30,6 +30,14 @@
             android:defaultValue=""/>
         <argument
             android:name="body"
+            app:argType="string"
+            android:defaultValue=""/>
+        <argument
+            android:name="sentAt"
+            app:argType="string"
+            android:defaultValue=""/>
+        <argument
+            android:name="readAt"
             app:argType="string"
             android:defaultValue=""/>
         <action
